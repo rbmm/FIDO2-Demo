@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.11.35303.130
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Fido2", "Fido2\Fido2.vcxproj", "{6F7F46DB-4EB4-543E-53AB-6734B7910052}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6F7F46DB-4EB4-543E-53AB-6734B7910052}.Release|x64.ActiveCfg = Release|x64
+		{6F7F46DB-4EB4-543E-53AB-6734B7910052}.Release|x64.Build.0 = Release|x64
+		{6F7F46DB-4EB4-543E-53AB-6734B7910052}.Release|x86.ActiveCfg = Release|Win32
+		{6F7F46DB-4EB4-543E-53AB-6734B7910052}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		    SolutionGuid = {265C77C9-3327-4C99-AB1B-32A87EBBBFDC}
+	EndGlobalSection
+EndGlobal
