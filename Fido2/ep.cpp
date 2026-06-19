@@ -37,18 +37,32 @@ ULONG GetRid(PSID Sid)
 	return *RtlSubAuthoritySid(Sid, *RtlSubAuthorityCountSid(Sid) - 1);
 }
 
-PBYTE reverse_memcpy(PBYTE Destination, const BYTE* Source, size_t Length)
+ULONG GetEccSigLen(PCERT_ECC_SIGNATURE peccsign)
 {
-	if (Length)
+	ULONG cb = __max(peccsign->r.cbData, peccsign->s.cbData);
+	return cb > 32 ? cb > 48 ? cb > 66 ? 0 : 66 : 48 : 32;
+}
+
+PBYTE rmemcpy(ULONG pad, PBYTE pb, PBYTE qb, ULONG cb)
+{
+	if (pad)
 	{
-		Source += Length;
-		do
+		do 
 		{
-			*Destination++ = *--Source;
-		} while (--Length);
+			*pb++ = 0;
+		} while (--pad);
 	}
 
-	return Destination;
+	if (cb)
+	{
+		qb += cb;
+		do 
+		{
+			*pb++ = *--qb;
+		} while (--cb);
+	}
+
+	return pb;
 }
 
 #define RPID L"www.rsa.com"
@@ -150,12 +164,16 @@ HRESULT MakeCredential(HWND hwnd, PSID UserSid, PCWSTR pwszName, PCWSTR pwszRpId
 
 				if (0 <= (hr = Decode(X509_ECC_SIGNATURE, att->pbSignature, att->cbSignature, &peccsign)))
 				{
-					ULONG cbSig = peccsign->r.cbData + peccsign->s.cbData;
-					PBYTE pbSig = (PBYTE)alloca(cbSig);
+					ULONG cbSig = 0;
+					PBYTE pbSig = 0;
 
-					reverse_memcpy(reverse_memcpy(pbSig,
-						peccsign->r.pbData, peccsign->r.cbData),
-						peccsign->s.pbData, peccsign->s.cbData);
+					if (ULONG cb = GetEccSigLen(peccsign))
+					{
+						rmemcpy(cb - peccsign->s.cbData, rmemcpy(cb - peccsign->r.cbData, 
+							pbSig = (PBYTE)alloca(cbSig = cb >> 1), 
+							peccsign->r.pbData, peccsign->r.cbData), 
+							peccsign->s.pbData, peccsign->s.cbData);
+					}
 
 					LocalFree(peccsign);
 
